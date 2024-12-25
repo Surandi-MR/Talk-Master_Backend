@@ -5,6 +5,7 @@ import com.talkmaster.talkmaster.repository.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,11 @@ public class SessionService {
 
     @Autowired
     private SessionRepository sessionRepository;
+
+    // Create a new session
+    public Session createSession(Session session) {
+        return sessionRepository.save(session);
+    }
 
     // Get all sessions
     public List<Session> getAllSessions() {
@@ -24,44 +30,70 @@ public class SessionService {
         return sessionRepository.findById(sessionId);
     }
 
-    // Get sessions by instructor ID
-    public List<Session> getSessionsByInstructorId(String instructorId) {
-        return sessionRepository.findByInstructorId(instructorId);
+    // Get sessions by studentId, instructorId, and status
+    public List<Session> getSessions(String studentId, String instructorId, String status) {
+        if (studentId != null && instructorId != null && status != null) {
+            return sessionRepository.findByStatusAndStudentIdAndInstructorId(status, studentId, instructorId);
+        } else if (studentId != null && instructorId != null) {
+            return sessionRepository.findByStudentIdAndInstructorId(studentId, instructorId);
+        } else if (studentId != null && status != null) {
+            return sessionRepository.findByStudentIdAndStatus(studentId, status);
+        } else if (instructorId != null && status != null) {
+            return sessionRepository.findByInstructorIdAndStatus(instructorId, status);
+        } else if (studentId != null) {
+            return sessionRepository.findByStudentId(studentId);
+        } else if (instructorId != null) {
+            return sessionRepository.findByInstructorId(instructorId);
+        } else {
+            return List.of();
+        }
     }
 
-    // Get sessions by student ID
-    public List<Session> getSessionsByStudentId(String studentId) {
-        return sessionRepository.findByStudentId(studentId);
-    }
+    // Get sessions within a date range for a specific student or instructor
+    public List<Session> getSessionsByDateRangeAndUser(String startDate, String endDate, String studentId,  String instructorId) {
+        LocalDateTime startDateTime;
+        LocalDateTime endDateTime;
 
-    // Get sessions by status
-    public List<Session> getSessionsByStatus(String status) {
-        return sessionRepository.findByStatus(status);
-    }
+        if (startDate == null || startDate.isEmpty()) {
+            startDateTime = LocalDateTime.now();
+        } else {
+            startDateTime = LocalDateTime.parse(startDate);
+        }
 
-    // Get sessions by student and instructor
-    public List<Session> getSessionsByStudentAndInstructor(String studentId, String instructorId) {
-        return sessionRepository.findByStudentIdAndInstructorId(studentId, instructorId);
-    }
+        if (endDate == null || endDate.isEmpty()) {
+            endDateTime = LocalDateTime.now().plusDays(7);
+        } else {
+            endDateTime = LocalDateTime.parse(endDate);
+        }
 
-    // Get sessions within a date range
-    public List<Session> getSessionsByDateRange(String startDate, String endDate) {
-        return sessionRepository.findBySessionDateBetween(startDate, endDate);
-    }
-
-    // Create a new session
-    public Session createSession(Session session) {
-        return sessionRepository.save(session);
+        if (studentId != null) {
+            return sessionRepository.findByStudentIdAndStartTimeBetween(studentId, startDateTime, endDateTime);
+        } else {
+            return sessionRepository.findByInstructorIdAndStartTimeBetween(instructorId, startDateTime, endDateTime);
+        }
     }
 
     // Update a session
     public Session updateSession(String sessionId, Session sessionDetails) {
         return sessionRepository.findById(sessionId).map(session -> {
-            session.setStartTime(sessionDetails.getStartTime());
-            session.setEndTime(sessionDetails.getEndTime());
-            session.setInstructorId(sessionDetails.getInstructorId());
-            session.setStudentId(sessionDetails.getStudentId());
-            session.setStatus(sessionDetails.getStatus());
+            if(sessionDetails.getTopic() != null) {
+                session.setTopic(sessionDetails.getTopic());
+            }
+            if(sessionDetails.getStartTime() != null) {
+                session.setStartTime(sessionDetails.getStartTime());
+            }
+            if(sessionDetails.getEndTime() != null) {
+                session.setEndTime(sessionDetails.getEndTime());
+            }
+            if(sessionDetails.getInstructorId() != null) {
+                session.setInstructorId(sessionDetails.getInstructorId());
+            }
+            if(sessionDetails.getStudentId() != null) {
+                session.setStudentId(sessionDetails.getStudentId());
+            }
+            if(sessionDetails.getStatus() != null) {
+                session.setStatus(sessionDetails.getStatus());
+            }
             return sessionRepository.save(session);
         }).orElseThrow(() -> new RuntimeException("Session not found with id: " + sessionId));
     }
