@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserRepository extends MongoRepository<User, String> {
 
     // Fetch users by name
-    List<User> findByFirstName(String firstName);//*** 
+    List<User> findByFirstName(String firstName);
 
     // Fetch users by role
     List<User> findByRole(String role);
