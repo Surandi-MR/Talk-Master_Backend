@@ -20,11 +20,11 @@ public class PackageController {
     }
 
     // Get a package by ID
-    // @GetMapping("/{id}")
-    // public Package getPackageById(@PathVariable String id) {
-    //     return packageService.getPackageById(id)
-    //             .orElseThrow(() -> new RuntimeException("Package not found with id " + id));
-    // }
+    @GetMapping("/{id}")
+    public Package getPackageById(@PathVariable String id) {
+        return packageService.getPackageById(id)
+                .orElseThrow(() -> new RuntimeException("Package not found with id " + id));
+    }
 
     // Create a new package
     @PostMapping("/create")

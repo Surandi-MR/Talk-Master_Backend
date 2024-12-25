@@ -3,10 +3,10 @@ package com.talkmaster.talkmaster.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "users") //map this class to a MongoDB collection.
+@Document(collection = "users")
 public class User {
-    @Id //mark a field as the unique identifier of a MongoDB document.
-    private String id; // MongoDB document ID
+    @Id
+    private String id; 
     private String firstName;
     private String lastName;
     private String email;

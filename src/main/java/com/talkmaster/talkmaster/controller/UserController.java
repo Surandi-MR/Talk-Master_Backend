@@ -29,6 +29,11 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
+    @GetMapping("/role/{role}")
+    public List<User> getUsersByRole(@PathVariable String role) {
+        return userService.getUsersByRole(role);
+    }
+
     @PostMapping("/create")
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
