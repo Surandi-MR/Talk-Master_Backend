@@ -48,6 +48,10 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        return userRepository.save(user); // MongoDB will auto-generate the ID if it's null
+        return userRepository.save(user);
+    }
+
+    public List<User> getUsersByRole(String role) {
+        return userRepository.findByRole(role);
     }
 }
