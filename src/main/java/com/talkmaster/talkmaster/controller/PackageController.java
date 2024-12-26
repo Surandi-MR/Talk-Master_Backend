@@ -1,6 +1,6 @@
 package com.talkmaster.talkmaster.controller;
 
-import com.talkmaster.talkmaster.model.Package;
+import com.talkmaster.talkmaster.model.PackageModel;
 import com.talkmaster.talkmaster.service.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,26 +15,26 @@ public class PackageController {
 
     // Get all packages
     @GetMapping("/all")
-    public List<Package> getAllPackages() {
+    public List<PackageModel> getAllPackages() {
         return packageService.getAllPackages();
     }
 
     // Get a package by ID
     @GetMapping("/{id}")
-    public Package getPackageById(@PathVariable String id) {
+    public PackageModel getPackageById(@PathVariable String id) {
         return packageService.getPackageById(id)
                 .orElseThrow(() -> new RuntimeException("Package not found with id " + id));
     }
 
     // Create a new package
     @PostMapping("/create")
-    public Package createPackage(@RequestBody Package pkg) {
+    public PackageModel createPackage(@RequestBody PackageModel pkg) {
         return packageService.createPackage(pkg);
     }
 
     // Update a package by ID
     @PutMapping("/{id}")
-    public Package updatePackage(@PathVariable String id, @RequestBody Package packageDetails) {
+    public PackageModel updatePackage(@PathVariable String id, @RequestBody PackageModel packageDetails) {
         return packageService.updatePackage(id, packageDetails);
     }
 
