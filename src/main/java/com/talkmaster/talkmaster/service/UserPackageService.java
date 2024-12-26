@@ -14,13 +14,12 @@ public class UserPackageService {
 
     @Autowired
     private UserPackageRepository userPackageRepository;
-    
+
     @Autowired
     private PackageService packageService;
 
     // Assign a package to a user
     public UserPackage assignPackageToUser(String userId, String packageId) {
-        System.out.println("packageId: vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv " + packageId);
         PackageModel pkg = packageService.getPackageById(packageId)
                 .orElseThrow(() -> new RuntimeException("UserPackage not found"));
         
@@ -34,7 +33,12 @@ public class UserPackageService {
 
     // Get all packages purchased by a user
     public List<UserPackage> getPackagesByUser(String userId) {
-        return userPackageRepository.findByUserId(userId);
+        List<UserPackage> userPackages = userPackageRepository.findByUserId(userId);
+        for(UserPackage userPackage : userPackages) {
+            userPackage.setPackageModel(packageService.getPackageById(userPackage.getPackageId())
+                    .orElseThrow(() -> new RuntimeException("Package not found")));
+        }
+        return userPackages;
     }
 
     // Get all users who purchased a specific package
@@ -48,5 +52,15 @@ public class UserPackageService {
                 .orElseThrow(() -> new RuntimeException("UserPackage not found"));
         userPackage.setRemainingSessions(remainingSessions);
         return userPackageRepository.save(userPackage);
+    }
+
+    // Get all active packages for a user
+    public List<UserPackage> getActivePackagesWithDetails(String userId) {
+        List<UserPackage> activeUserPackages =  userPackageRepository.findByUserIdAndRemainingSessionsGreaterThan(userId, 0);
+        for(UserPackage userPackage : activeUserPackages) {
+            userPackage.setPackageModel(packageService.getPackageById(userPackage.getPackageId())
+                    .orElseThrow(() -> new RuntimeException("Package not found")));
+        }
+        return activeUserPackages;
     }
 }

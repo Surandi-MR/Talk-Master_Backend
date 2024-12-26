@@ -13,6 +13,7 @@ public class UserPackage {
     private String packageId; // References Package.id
     private LocalDateTime purchaseDate;
     private int remainingSessions;
+    private PackageModel packageModel;
 
     // Getters and Setters
 
@@ -54,5 +55,13 @@ public class UserPackage {
 
     public void setRemainingSessions(int remainingSessions) {
         this.remainingSessions = remainingSessions;
+    }
+
+    public PackageModel getPackageModel() {
+        return packageModel;
+    }
+
+    public void setPackageModel(PackageModel packageModel) {
+        this.packageModel = packageModel;
     }
 }

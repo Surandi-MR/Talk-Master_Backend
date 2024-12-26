@@ -41,4 +41,10 @@ public class UserPackageController {
             @RequestParam int remainingSessions) {
         return userPackageService.updateRemainingSessions(id, remainingSessions);
     }
+
+    // Get all active packages for a user
+    @GetMapping("/active/{userId}")
+    public List<UserPackage> getActivePackages(@PathVariable String userId) {
+        return userPackageService.getActivePackagesWithDetails(userId);
+    }
 }
