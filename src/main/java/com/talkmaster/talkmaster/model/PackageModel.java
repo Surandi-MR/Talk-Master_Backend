@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "packages")//map this class to a MongoDB collection.
-public class Package {
+public class PackageModel {
     @Id //mark a field as the unique identifier of a MongoDB document.
     private String id; // MongoDB document ID
     private String name;

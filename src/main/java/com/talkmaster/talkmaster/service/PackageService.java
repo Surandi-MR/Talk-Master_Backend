@@ -1,6 +1,6 @@
 package com.talkmaster.talkmaster.service;
 
-import com.talkmaster.talkmaster.model.Package;
+import com.talkmaster.talkmaster.model.PackageModel;
 import com.talkmaster.talkmaster.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,22 +14,22 @@ public class PackageService {
     private PackageRepository packageRepository;
 
     // Get all packages
-    public List<Package> getAllPackages() {
+    public List<PackageModel> getAllPackages() {
         return packageRepository.findAll();
     }
 
     // Get package by ID
-    public Optional<Package> getPackageById(String id) {
+    public Optional<PackageModel> getPackageById(String id) {
         return packageRepository.findById(id);
     }
 
     // Create a new package
-    public Package createPackage(Package pkg) {
+    public PackageModel createPackage(PackageModel pkg) {
         return packageRepository.save(pkg);
     }
 
     // Update an existing package
-    public Package updatePackage(String id, Package packageDetails) {
+    public PackageModel updatePackage(String id, PackageModel packageDetails) {
         return packageRepository.findById(id).map(existingPackage -> {
             existingPackage.setName(packageDetails.getName());
             existingPackage.setPrice(packageDetails.getPrice());
