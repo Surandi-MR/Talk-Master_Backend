@@ -16,7 +16,7 @@ public class SessionController {
     private SessionService sessionService;
 
     
-    // Create a new session
+    // Create a new session 
     @PostMapping
     public Session createSession(@RequestBody Session session) {
         return sessionService.createSession(session);
